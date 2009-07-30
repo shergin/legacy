@@ -1,8 +1,4 @@
-function Class(parent, members) {
-
-	function $class() {
-		return arguments.callee.caller['class'];
-	}
+function Class(parent, members, static) {
 
 	function $base(a) {
 		var caller = arguments.callee.caller;
@@ -14,8 +10,8 @@ function Class(parent, members) {
 	}
 
 	var $class = function(a) {
-		if ($class.prototype.__constructor__)
-			$class.prototype.__constructor__.apply(this, arguments);
+		if ($class.prototype.$constructor)
+			$class.prototype.$constructor.apply(this, arguments);
 	}
 	
 	$class.prototype = {};
@@ -36,12 +32,16 @@ function Class(parent, members) {
 		var member = members[name];
 		if (member instanceof Function) {
 			if (name == 'constructor')
-				name = '__constructor__';
+				name = '$constructor';
 			member.name = name;
 			member['class'] = $class;
 		}
 		$class.prototype[name] = member;
 	}
-
+	
+	if (static)
+		for (var name in static)
+			$class[name] = static[name];
+	
 	return $class;
 }
