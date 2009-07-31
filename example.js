@@ -22,14 +22,14 @@ Mammal = Class(
 	Animal,
 	{
 		constructor: function() {
-			this.base();
+			this.$base();
 			document.writeln('Mammal::constructor' + '<br>');
 		},
 		feed: function() {
 			document.writeln('Mammal::feed' + '<br>');
 		},
 		identity: function() {
-			return "I'm a Mammal and " + this.base();
+			return "I'm a Mammal and " + this.$base();
 		}
 	}
 )
@@ -39,11 +39,11 @@ Dog = Class(
 	Mammal,
 	{
 		constructor: function() {
-			this.base();
+			this.$base();
 			document.writeln('Dog::constructor' + '<br>')
 		},
 		identity: function() {
-			return "I'm a Dog and " + this.base();
+			return "I'm a Dog and " + this.$base();
 		}
 	}
 )
@@ -53,15 +53,15 @@ Chihuahua = Class(
 	Dog,
 	{
 		constructor: function() {
-			//this.base();
-			this.super().constructor.call(this);
+			//this.$base();
+			this.$super().constructor.call(this);
 			document.writeln('Chihuahua::constructor' + '<br>')
 		},
 		identity: function() {
-			return "I'm a Chihuahua and " + this.base();
+			return "I'm a Chihuahua and " + this.$base();
 		},
 		feed: function() {
-			this.super().feed.call(this);
+			this.$super().feed.call(this);
 			document.writeln('Chihuahua::feed' + '<br/>');
 		}
 	}
@@ -72,11 +72,11 @@ Dalmatian = Class(
 	Dog,
 	{
 		constructor: function() {
-			this.base();
+			this.$base();
 			document.writeln('Chihuahua::constructor' + '<br>')
 		},
 		identity: function() {
-			return "I'm a Chihuahua and " + this.base();
+			return "I'm a Chihuahua and " + this.$base();
 		}
 	}
 )
@@ -84,6 +84,6 @@ Dalmatian = Class(
 chihuahua = new Chihuahua();
 chihuahua.feed();
 
-document.writeln('chihuahua.class == Chihuahua is ' + (chihuahua.class == Chihuahua) + '<br/>')
+document.writeln('chihuahua.$class == Chihuahua is ' + (chihuahua.$class == Chihuahua) + '<br/>')
 
 document.writeln('The end. Thanks!')
