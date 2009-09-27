@@ -1,17 +1,29 @@
-function Class(parent, members, static) {
+/*
+	Legacy: Class-oriented OOP framework
+	legacy.js, version 0.1
+	Copyright (c) 2009, Valentin Shergin, shergin.com
+	License: LGPL
+*/
+
+function Class(parent, members, $static) {
 
 	function $base(a) {
 		var caller = $base.caller || arguments.callee.caller;
-		return caller.$class.$super.prototype[caller.$name].apply(this, a || caller.arguments);
+		return caller.$class.$super.prototype[caller.$name].apply(this, arguments.length ? arguments : caller.arguments);
 	}
 
 	function $super() {
 		return ($super.caller || arguments.callee.caller).$class.$super.prototype;
 	}
 
-	var $class = function(a) {
+	function $class(a) {
+		console.log('function $class(a)!');
 		if ($class.prototype.$constructor)
 			$class.prototype.$constructor.apply(this, arguments);
+		else {
+			console.log('hello!')
+		
+		}
 	}
 	
 	$class.prototype = {};
@@ -28,20 +40,23 @@ function Class(parent, members, static) {
 	$class.prototype.$super = $super;
 	$class.prototype.$base = $base;
 
+	if (members.constructor && members.constructor != Object) {
+		members.$constructor = members.constructor;
+		delete members.constructor;
+	}
+	
 	for (var name in members) {
 		var member = members[name];
 		if (member instanceof Function) {
-			if (name == 'constructor')
-				name = '$constructor';
 			member.$name = name;
-			member['$class'] = $class;
+			member.$class = $class;
 		}
 		$class.prototype[name] = member;
 	}
 	
-	if (static)
-		for (var name in static)
-			$class[name] = static[name];
+	if ($static)
+		for (var name in $static)
+			$class[name] = $static[name];
 	
 	return $class;
 }
