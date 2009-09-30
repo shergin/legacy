@@ -17,13 +17,8 @@ function Class(parent, members, $static) {
 	}
 
 	function $class(a) {
-		console.log('function $class(a)!');
 		if ($class.prototype.$constructor)
 			$class.prototype.$constructor.apply(this, arguments);
-		else {
-			console.log('hello!')
-		
-		}
 	}
 	
 	$class.prototype = {};
