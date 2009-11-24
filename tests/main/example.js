@@ -3,7 +3,7 @@ Animal = Class(
 	null,
 	{
 		constructor: function() {
-			document.writeln('Animal::constructor' + '<br>')
+			document.writeln('Animal::constructor' + '<br/>')
 		},
 		identity: function() {
 			return "I'm a Animal";
@@ -23,10 +23,10 @@ Mammal = Class(
 	{
 		constructor: function() {
 			this.$base();
-			document.writeln('Mammal::constructor' + '<br>');
+			document.writeln('Mammal::constructor' + '<br/>');
 		},
 		feed: function() {
-			document.writeln('Mammal::feed' + '<br>');
+			document.writeln('Mammal::feed' + '<br/>');
 		},
 		identity: function() {
 			return "I'm a Mammal and " + this.$base();
@@ -40,7 +40,7 @@ Dog = Class(
 	{
 		constructor: function() {
 			this.$base();
-			document.writeln('Dog::constructor' + '<br>')
+			document.writeln('Dog::constructor' + '<br/>')
 		},
 		identity: function() {
 			return "I'm a Dog and " + this.$base();
@@ -55,7 +55,7 @@ Chihuahua = Class(
 		constructor: function() {
 			//this.$base();
 			this.$super().constructor.call(this);
-			document.writeln('Chihuahua::constructor' + '<br>')
+			document.writeln('Chihuahua::constructor' + '<br/>')
 		},
 		identity: function() {
 			return "I'm a Chihuahua and " + this.$base();
@@ -73,7 +73,7 @@ Dalmatian = Class(
 	{
 		constructor: function() {
 			this.$base();
-			document.writeln('Chihuahua::constructor' + '<br>')
+			document.writeln('Chihuahua::constructor' + '<br/>')
 		},
 		identity: function() {
 			return "I'm a Chihuahua and " + this.$base();

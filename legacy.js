@@ -1,22 +1,23 @@
 /*
 	Legacy: Class-oriented OOP framework
 	legacy.js, version 0.1
+	http://github.com/shergin/legacy
 	Copyright (c) 2009, Valentin Shergin, shergin.com
 	License: LGPL
 */
 
 function Class(parent, members, $static) {
-
-	function $base(a) {
+	
+	function $base() {
 		var caller = $base.caller || arguments.callee.caller;
 		return caller.$class.$super.prototype[caller.$name].apply(this, arguments.length ? arguments : caller.arguments);
 	}
-
+	
 	function $super() {
 		return ($super.caller || arguments.callee.caller).$class.$super.prototype;
 	}
-
-	function $class(a) {
+	
+	function $class() {
 		if ($class.prototype.$constructor)
 			$class.prototype.$constructor.apply(this, arguments);
 	}
@@ -30,11 +31,11 @@ function Class(parent, members, $static) {
 		$class.prototype = new F();
 		$class.prototype.constructor = $class;
 	}
-
+	
 	$class.prototype.$class = $class;
 	$class.prototype.$super = $super;
 	$class.prototype.$base = $base;
-
+	
 	if (members.constructor && members.constructor != Object) {
 		members.$constructor = members.constructor;
 		delete members.constructor;
