@@ -1,12 +1,12 @@
 /*
 	Legacy: Class-oriented OOP framework
 	legacy.js, version 0.1
-	http://github.com/shergin/legacy
+	http://github.com/shergin/legacy/
 	Copyright (c) 2009, Valentin Shergin, shergin.com
 	License: LGPL
 */
 
-function Class(parent, members, $static) {
+function Class(parent, members, statics) {
 	
 	function $base() {
 		var caller = $base.caller || arguments.callee.caller;
@@ -26,9 +26,13 @@ function Class(parent, members, $static) {
 	$class.$super = parent;
 	
 	if (parent) {
-		var F = function() { };
-		F.prototype = parent.prototype;
-		$class.prototype = new F();
+		if ($class.prototype.__proto__) {
+			$class.prototype.__proto__ = parent.prototype;
+		} else {
+			var F = function() {};
+			F.prototype = parent.prototype;
+			$class.prototype = new F();
+		}
 		$class.prototype.constructor = $class;
 	}
 	
@@ -50,9 +54,9 @@ function Class(parent, members, $static) {
 		$class.prototype[name] = member;
 	}
 	
-	if ($static)
-		for (var name in $static)
-			$class[name] = $static[name];
+	if (statics)
+		for (var name in statics)
+			$class[name] = statics[name];
 	
 	return $class;
 }
