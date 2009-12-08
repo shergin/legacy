@@ -1,45 +1,46 @@
 /*
-	Legacy: Class-oriented OOP framework
-	legacy.js, version 0.1
+	Legacy: Javascript class-oriented inheritance framework
+	legacy.js, version 0.4
 	http://github.com/shergin/legacy/
-	Copyright (c) 2009, Valentin Shergin, shergin.com
+	Copyright (c) 2009, Valentin Shergin, http://shergin.com/
 	License: LGPL
 */
 
-function Class(parent, members, statics) {
+function Class(extends, members, statics) {
 	
-	function $base() {
-		var caller = $base.caller || arguments.callee.caller;
-		return caller.$class.$super.prototype[caller.$name].apply(this, arguments.length ? arguments : caller.arguments);
+	if (extends && !extends.prototype) {
+		members = extends;
+		statics = members;
+		extends = null;
 	}
 	
-	function $super() {
-		return ($super.caller || arguments.callee.caller).$class.$super.prototype;
-	}
+	extends = extends || members.$extends;
+	statics = statics || members.$statics;
 	
-	function $class() {
+	var $class = function $class() {
 		if ($class.prototype.$constructor)
 			$class.prototype.$constructor.apply(this, arguments);
 	}
 	
-	$class.prototype = {};
-	$class.$super = parent;
+	var prototype = {};
 	
-	if (parent) {
-		if ($class.prototype.__proto__) {
-			$class.prototype.__proto__ = parent.prototype;
+	if (extends) {
+		if (prototype.__proto__) {
+			prototype.__proto__ = extends.prototype;
 		} else {
-			var F = function() {};
-			F.prototype = parent.prototype;
-			$class.prototype = new F();
+			Class.$empty.prototype = extends.prototype;
+			prototype = new Class.$empty();
 		}
-		$class.prototype.constructor = $class;
+		prototype.constructor = $class;
 	}
 	
-	$class.prototype.$class = $class;
-	$class.prototype.$super = $super;
-	$class.prototype.$base = $base;
+	$class.$super = extends;
+	$class.prototype = prototype;
 	
+	prototype.$class = $class;
+	prototype.$super = Class.$super;
+	prototype.$base = Class.$base;
+
 	if (members.constructor && members.constructor != Object) {
 		members.$constructor = members.constructor;
 		delete members.constructor;
@@ -51,7 +52,7 @@ function Class(parent, members, statics) {
 			member.$name = name;
 			member.$class = $class;
 		}
-		$class.prototype[name] = member;
+		prototype[name] = member;
 	}
 	
 	if (statics)
@@ -59,4 +60,15 @@ function Class(parent, members, statics) {
 			$class[name] = statics[name];
 	
 	return $class;
+}
+
+Class.$empty = function () {}
+
+Class.$base = function $base() {
+	var caller = $base.caller || arguments.callee.caller;
+	return caller.$class.$super.prototype[caller.$name].apply(this, arguments.length ? arguments : caller.arguments);
+}
+
+Class.$super = function $super() {
+	return ($super.caller || arguments.callee.caller).$class.$super.prototype;
 }

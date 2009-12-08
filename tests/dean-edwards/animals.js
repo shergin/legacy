@@ -18,6 +18,7 @@ var Mouse = Animal.extend();
 
 var Cat = Animal.extend({
 		eat: function(food) {
+			this.say('Cats eat.');
 			if (food instanceof Mouse)
 				this.base();
 			else
