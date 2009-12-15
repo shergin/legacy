@@ -54,14 +54,14 @@ Chihuahua = Class(
 	{
 		constructor: function() {
 			//this.$base();
-			this.$super().constructor.call(this);
+			this.$super.$super.constructor.call(this);
 			document.writeln('Chihuahua::constructor' + '<br/>')
 		},
 		identity: function() {
 			return "I'm a Chihuahua and " + this.$base();
 		},
 		feed: function() {
-			this.$super().feed.call(this);
+			this.$super.feed.call(this);
 			document.writeln('Chihuahua::feed' + '<br/>');
 		}
 	}

@@ -1,6 +1,6 @@
 /*
 	Legacy: Javascript class-oriented inheritance framework
-	legacy.js, version 0.4
+	legacy.js, version 0.5
 	http://github.com/shergin/legacy/
 	Copyright (c) 2009, Valentin Shergin, http://shergin.com/
 	License: LGPL
@@ -38,9 +38,10 @@ function Class(extends, members, statics) {
 	$class.prototype = prototype;
 	
 	prototype.$class = $class;
-	prototype.$super = Class.$super;
+	prototype.$super = extends ? extends.prototype : null;
 	prototype.$base = Class.$base;
-
+	prototype.$prototype = prototype;
+	
 	if (members.constructor && members.constructor != Object) {
 		members.$constructor = members.constructor;
 		delete members.constructor;
@@ -67,8 +68,4 @@ Class.$empty = function () {}
 Class.$base = function $base() {
 	var caller = $base.caller || arguments.callee.caller;
 	return caller.$class.$super.prototype[caller.$name].apply(this, arguments.length ? arguments : caller.arguments);
-}
-
-Class.$super = function $super() {
-	return ($super.caller || arguments.callee.caller).$class.$super.prototype;
 }
