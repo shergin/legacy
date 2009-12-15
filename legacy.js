@@ -40,7 +40,6 @@ function Class(extends, members, statics) {
 	prototype.$class = $class;
 	prototype.$super = extends ? extends.prototype : null;
 	prototype.$base = Class.$base;
-	prototype.$prototype = prototype;
 	
 	if (members.constructor && members.constructor != Object) {
 		members.$constructor = members.constructor;
