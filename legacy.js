@@ -1,21 +1,21 @@
 /*
 	Legacy: Javascript class-oriented inheritance framework
-	legacy.js, version 0.5
+	legacy.js, version 0.6
 	http://github.com/shergin/legacy/
 	Copyright (c) 2009, Valentin Shergin, http://shergin.com/
 	License: LGPL
 */
 
-function Class(extends, members, statics) {
+function Class($super, $members, $statics) {
 	
-	if (extends && !extends.prototype) {
-		members = extends;
-		statics = members;
-		extends = null;
+	if ($super && !$super.prototype) {
+		$members = $super;
+		$statics = $members;
+		$super = null;
 	}
 	
-	extends = extends || members.$extends;
-	statics = statics || members.$statics;
+	$super = $super || $members.$super;
+	$statics = $statics || $members.$statics;
 	
 	var $class = function $class() {
 		if ($class.prototype.$constructor)
@@ -24,30 +24,26 @@ function Class(extends, members, statics) {
 	
 	var prototype = {};
 	
-	if (extends) {
+	if ($super) {
 		if (prototype.__proto__) {
-			prototype.__proto__ = extends.prototype;
+			prototype.__proto__ = $super.prototype;
 		} else {
-			Class.$empty.prototype = extends.prototype;
+			Class.$empty.prototype = $super.prototype;
 			prototype = new Class.$empty();
 		}
 		prototype.constructor = $class;
 	}
 	
-	$class.$super = extends;
+	$class.$super = $super;
 	$class.prototype = prototype;
 	
-	prototype.$class = $class;
-	prototype.$super = extends ? extends.prototype : null;
-	prototype.$base = Class.$base;
-	
-	if (members.constructor && members.constructor != Object) {
-		members.$constructor = members.constructor;
-		delete members.constructor;
+	if ($members.constructor && $members.constructor != Object) {
+		$members.$constructor = $members.constructor;
+		delete $members.constructor;
 	}
 	
-	for (var name in members) {
-		var member = members[name];
+	for (var name in $members) {
+		var member = $members[name];
 		if (member instanceof Function) {
 			member.$name = name;
 			member.$class = $class;
@@ -55,9 +51,13 @@ function Class(extends, members, statics) {
 		prototype[name] = member;
 	}
 	
-	if (statics)
-		for (var name in statics)
-			$class[name] = statics[name];
+	prototype.$class = $class;
+	prototype.$super = $super ? $super.prototype : null;
+	prototype.$base = Class.$base;
+	
+	if ($statics)
+		for (var name in $statics)
+			$class[name] = $statics[name];
 	
 	return $class;
 }
